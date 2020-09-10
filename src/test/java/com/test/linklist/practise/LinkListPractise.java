@@ -123,4 +123,19 @@ public class LinkListPractise {
             System.out.println(node.getValue());
         }
     }
+
+    @Test
+    public void testDeleteElement() {
+        Node header = new Node();
+        header.setValue(0);
+        LinkListDeteleElement linkListDeteleElement = new LinkListDeteleElement(header);
+        for (int i = 8; i > 0; i--) {
+            linkListDeteleElement.add(i);
+        }
+        Node node = linkListDeteleElement.delete(3);
+        if (node != null) {
+            System.out.println(node.getValue());
+        }
+    }
+
 }
