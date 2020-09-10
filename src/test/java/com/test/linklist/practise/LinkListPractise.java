@@ -110,4 +110,17 @@ public class LinkListPractise {
         System.out.println("合并后的内容");
         linkListMerge.print(node);
     }
+
+    @Test
+    public void testMiddleElement() {
+        Node header = new Node();
+        LInkListMiddleElement lInkListMiddleElement = new LInkListMiddleElement(header);
+        for (int i = 1; i <= 8; i++) {
+            lInkListMiddleElement.add(i);
+        }
+        Node node = lInkListMiddleElement.middleElement();
+        if (node != null) {
+            System.out.println(node.getValue());
+        }
+    }
 }
