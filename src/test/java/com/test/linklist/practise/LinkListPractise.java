@@ -74,4 +74,40 @@ public class LinkListPractise {
             System.out.println(node.getValue());
         }
     }
+
+    @Test
+    public void testLinkListMerge() {
+        Node header1 = new Node();
+        Node header2 = new Node();
+        LinkListMerge linkListMerge = new LinkListMerge(header1, header2);
+        Node node11 = new Node();
+        header1.setNext(node11);
+        node11.setValue(1);
+        Node node12 = new Node();
+        node11.setNext(node12);
+        node12.setValue(4);
+        Node node13 = new Node();
+        node12.setNext(node13);
+        node13.setValue(7);
+
+        Node node21 = new Node();
+        header2.setNext(node21);
+        node21.setValue(2);
+        Node node22 = new Node();
+        node21.setNext(node22);
+        node22.setValue(4);
+        Node node23 = new Node();
+        node22.setNext(node23);
+        node23.setValue(8);
+
+        System.out.println("链表1的内容");
+        linkListMerge.print(linkListMerge.getHeader1());
+
+        System.out.println("链表2的内容");
+        linkListMerge.print(linkListMerge.getHeader2());
+
+        Node node = linkListMerge.merge();
+        System.out.println("合并后的内容");
+        linkListMerge.print(node);
+    }
 }
