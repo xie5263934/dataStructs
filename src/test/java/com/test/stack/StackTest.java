@@ -13,4 +13,10 @@ public class StackTest {
         ReguleCaculate caculate = new ReguleCaculate(20);
         System.out.println(caculate.eval("5*6"));
     }
+
+    @Test
+    public void testSymbols(){
+        SymbolCheck symbolCheck = new SymbolCheck(20);
+        System.out.println(symbolCheck.check("{({}})"));
+    }
 }
