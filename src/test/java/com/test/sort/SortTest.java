@@ -115,4 +115,19 @@ public class SortTest {
             System.out.println(arr[i]);
         }
     }
+
+    @Test
+    public void testFindElements() {
+        Random random = new Random();
+        int[] arr = new int[10];
+        for (int i = 0; i < 10; i++) {
+            arr[i] = random.nextInt(100);
+            System.out.println(arr[i]);
+        }
+        KElements sort = new KElements();
+        Integer value = sort.find(arr, 10, 4);
+        if (value != null) {
+            System.out.println(value);
+        }
+    }
 }
