@@ -70,4 +70,34 @@ public class SortTest {
             System.out.println(arr[i]);
         }
     }
+
+    @Test
+    public void testSort1() {
+        Random random = new Random();
+        int[] arr = new int[10];
+        for (int i = 0; i < 10; i++) {
+            arr[i] = random.nextInt(100);
+            System.out.println(arr[i]);
+        }
+        MySortTest sort = new MySortTest();
+        sort.quickSort(arr, arr.length);
+        for (int i = 0; i < 10; i++) {
+            System.out.println(arr[i]);
+        }
+    }
+
+    @Test
+    public void testSort2() {
+        Random random = new Random();
+        int[] arr = new int[10];
+        for (int i = 0; i < 10; i++) {
+            arr[i] = random.nextInt(100);
+            System.out.println(arr[i]);
+        }
+        MySortTest sort = new MySortTest();
+        sort.mergeSort(arr, arr.length);
+        for (int i = 0; i < 10; i++) {
+            System.out.println(arr[i]);
+        }
+    }
 }
