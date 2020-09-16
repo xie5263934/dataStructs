@@ -130,4 +130,19 @@ public class SortTest {
             System.out.println(value);
         }
     }
+
+    @Test
+    public void testBucketSort() {
+        Random random = new Random();
+        int[] arr = new int[10];
+        for (int i = 0; i < 10; i++) {
+            arr[i] = random.nextInt(100);
+            System.out.println(arr[i]);
+        }
+        BucketSort sort = new BucketSort();
+        sort.sort(arr);
+        for (int i = 0; i < 10; i++) {
+            System.out.println(arr[i]);
+        }
+    }
 }
