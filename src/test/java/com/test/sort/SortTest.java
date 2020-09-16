@@ -72,6 +72,21 @@ public class SortTest {
     }
 
     @Test
+    public void testQuickSort() {
+        Random random = new Random();
+        int[] arr = new int[10];
+        for (int i = 0; i < 10; i++) {
+            arr[i] = random.nextInt(100);
+            System.out.println(arr[i]);
+        }
+        QuickSort sort = new QuickSort();
+        sort.sort(arr, arr.length);
+        for (int i = 0; i < 10; i++) {
+            System.out.println(arr[i]);
+        }
+    }
+
+    @Test
     public void testSort1() {
         Random random = new Random();
         int[] arr = new int[10];
