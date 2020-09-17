@@ -145,4 +145,19 @@ public class SortTest {
             System.out.println(arr[i]);
         }
     }
+
+    @Test
+    public void testCountSort() {
+        Random random = new Random();
+        int[] arr = new int[8];
+        for (int i = 0; i < 8; i++) {
+            arr[i] = random.nextInt(10);
+            System.out.println(arr[i]);
+        }
+        CountSort sort = new CountSort();
+        sort.sort(arr, arr.length);
+        for (int i = 0; i < 8; i++) {
+            System.out.println(arr[i]);
+        }
+    }
 }
