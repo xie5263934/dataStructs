@@ -1,5 +1,6 @@
 package com.test.sort;
 
+import com.test.recursion.RadixSort;
 import org.junit.Test;
 
 import java.util.Random;
@@ -157,6 +158,24 @@ public class SortTest {
         CountSort sort = new CountSort();
         sort.sort(arr, arr.length);
         for (int i = 0; i < 8; i++) {
+            System.out.println(arr[i]);
+        }
+    }
+
+    @Test
+    public void testRadixSort() {
+        String[] arr = new String[5];
+        arr[0] = "hke";
+        arr[1] = "iba";
+        arr[2] = "hzg";
+        arr[3] = "ikf";
+        arr[4] = "hac";
+        for (int i = 0; i < 5; i++) {
+            System.out.println(arr[i]);
+        }
+        RadixSort sort = new RadixSort();
+        sort.sort(arr, arr.length);
+        for (int i = 0; i < 5; i++) {
             System.out.println(arr[i]);
         }
     }
