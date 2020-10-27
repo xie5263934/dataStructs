@@ -23,4 +23,12 @@ public class BinarySearchTest {
             System.out.print(arr[i]+",");
         }
     }
+
+    @Test
+    public void testSquare(){
+        double a = 0.04;
+        int precious = 6;
+        BinarySearchForSquare binarySearchForSquare = new BinarySearchForSquare();
+        System.out.println(binarySearchForSquare.getSquare(a,precious));
+    }
 }
