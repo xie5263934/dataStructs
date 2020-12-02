@@ -2,6 +2,8 @@ package com.test.tree;
 
 import org.junit.Test;
 
+import java.util.List;
+
 public class BinarySearchTreeTest {
 
     @Test
@@ -60,5 +62,25 @@ public class BinarySearchTreeTest {
         tree.add(node6);
         tree.add(node7);
         tree.middle(tree.getTree());
+        /*List<Node> nodeList = tree.search(13);
+        print(nodeList);*/
+        System.out.println("准备删除13");
+        tree.delete(13,tree.getTree(), tree.getTree());
+        tree.middle(tree.getTree());
+        System.out.println("准备删除16");
+        tree.delete(16,tree.getTree(), tree.getTree());
+        tree.middle(tree.getTree());
+        System.out.println("准备删除14");
+        tree.delete(14,tree.getTree(), tree.getTree());
+        tree.middle(tree.getTree());
+        System.out.println("准备删除9");
+        tree.delete(9,tree.getTree(), tree.getTree());
+        tree.middle(tree.getTree());
+    }
+
+    private void print(List<Node> nodeList){
+        if(nodeList != null && nodeList.size() > 0){
+            nodeList.stream().forEach(System.out::println);
+        }
     }
 }
