@@ -132,9 +132,14 @@ public class CommonBinaryTree {
                 pp.setRight(null);
             }
         }
-        //从真正要删除节点的父节点的左右子树中继续递归删除，直到将所有等于要删除的值的节点全部删除完毕
-        delete(value,parentTmp.getLeft(),parentTmp);
-        delete(value,parentTmp.getRight(),parentTmp);
+        //判断当前要删除节点tmp和父节点tmpParent的关系，从而直到应该继续往哪边递归删除，直到将所有等于要删除的值的节点全部删除完毕，
+        //并且这里使用parent.getLeft()或者parnet.getRight()的原因是因为，节点虽然从树上摘除了，但是tmp依然指向的这个节点，会导致
+        //tmp永远不为空，递归永远不结束，所以通过parent来获取子孩子，这样被摘除的节点肯定对应位置就是空，递归就能结束
+        if(tmp==parentTmp.getLeft()) {
+            delete(value, parentTmp.getLeft(), parentTmp);
+        }else {
+            delete(value, parentTmp.getRight(), parentTmp);
+        }
     }
 
 
