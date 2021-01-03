@@ -1,7 +1,5 @@
 package com.test.tree.avl;
 
-import java.util.Comparator;
-
 /**
  * 创建一个节点，当前节点包含数据区，指向两个孩子节点的左孩子指针和右孩子指针，以及记录当前节点高度的字段
  *
