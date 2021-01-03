@@ -28,7 +28,7 @@ public class AVLTreeTest {
         tree.add(new Integer(10));
         tree.add(new Integer(9));
         tree.add(new Integer(8));
-        tree.mid(tree.getRoot());
+       // tree.mid(tree.getRoot());
         tree.delete(new Integer(13));
         tree.mid(tree.getRoot());
     }

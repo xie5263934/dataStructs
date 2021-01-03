@@ -154,6 +154,9 @@ public class AVLTree<T extends Comparable<T>> {
                 tmp = null;
             }
         }
+        if(tree != null){
+            tree.setHeight(max(height(tree.getLeft()),height(tree.getRight())+1));
+        }
         return tree;
     }
 
