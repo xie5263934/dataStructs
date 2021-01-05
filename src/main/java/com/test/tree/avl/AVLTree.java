@@ -43,7 +43,7 @@ public class AVLTree<T extends Comparable<T>> {
                  */
                 AVLNode l = tree.getLeft();
                 if (l.getKey().compareTo(value.getKey()) > 0) {
-                    tree = leftleftRotation(tree);
+                    tree = leftLeftRotation(tree);
                 } else {
                     tree = leftRightRotation(tree);
                 }
@@ -99,7 +99,7 @@ public class AVLTree<T extends Comparable<T>> {
             /**
              * 在当前节点的左子树中进行删除，其实删除操作可以反过来看，如果是在左子树中进行删除，那么可以看成是在当前节点的右子树R中进行插入操作，
              * 那么我们只需要比较右子树的左右子树的高度，如果当前节点右孩子的左子树高，可以看成在当前节点右孩子的左子树L中进行了插入操作，那么就是RL情况，
-             * 如果是当前节点的右孩子的右子树高，那么可以看成是在当前节点右孩子的右子树中进行了插入操作，那么是RR情况
+             * 如果是当前节点的右孩子的右子树高，那么可以看成是在当前节点右孩子的右子树R中进行了插入操作，那么是RR情况
              */
             tree.setLeft(delete(tree.getLeft(), value));
             if (height(tree.getRight()) - height(tree.getLeft()) == 2) {
@@ -120,7 +120,7 @@ public class AVLTree<T extends Comparable<T>> {
             if (height(tree.getLeft()) - height(tree.getRight()) == 2) {
                 AVLNode left = tree.getLeft();
                 if (height(left.getLeft()) > height(left.getRight())) {
-                    tree = leftleftRotation(tree);
+                    tree = leftLeftRotation(tree);
                 } else {
                     tree = leftRightRotation(tree);
                 }
@@ -149,9 +149,7 @@ public class AVLTree<T extends Comparable<T>> {
                     tree.setRight(delete(tree.getRight(), left));
                 }
             } else {
-                AVLNode tmp = tree;
                 tree = tree.getLeft() != null ? tree.getLeft() : tree.getRight();
-                tmp = null;
             }
         }
         if(tree != null){
@@ -163,7 +161,8 @@ public class AVLTree<T extends Comparable<T>> {
 
     /**
      * 查找某个节点的高度，因为节点的高度是存放在节点的height字段中，所以直接返回
-     * 对于tree是null的情况，我们认为当前节点是个虚拟节点，高度为0
+     * 如果是叶子节点，我们返回叶子节点的高度0，
+     * 对于tree是null的情况，我们认为当前节点是个虚拟节点，高度为-1
      *
      * @param tree
      * @return
@@ -184,7 +183,7 @@ public class AVLTree<T extends Comparable<T>> {
      * @param node
      * @return
      */
-    private AVLNode leftleftRotation(AVLNode node) {
+    private AVLNode leftLeftRotation(AVLNode node) {
         if (node == null) {
             return node;
         }
@@ -231,7 +230,7 @@ public class AVLTree<T extends Comparable<T>> {
             return node;
         }
         node.setLeft(rightRightRotation(node.getLeft()));
-        return leftleftRotation(node);
+        return leftLeftRotation(node);
     }
 
     /**
@@ -247,7 +246,7 @@ public class AVLTree<T extends Comparable<T>> {
         if (node == null) {
             return node;
         }
-        node.setRight(leftleftRotation(node.getRight()));
+        node.setRight(leftLeftRotation(node.getRight()));
         return rightRightRotation(node);
     }
 
