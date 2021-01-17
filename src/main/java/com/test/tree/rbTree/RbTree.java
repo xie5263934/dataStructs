@@ -89,8 +89,21 @@ public class RbTree<T extends Comparable<T>> {
         node.setLeft(tree.nil);
         node.setRight(tree.nil);
         node.setColor(0);
+        insertFix(tree,node);
     }
 
+    /**
+     * 总结插入修复最多不会超过3次修复动作，就能让红黑树恢复性质
+     * 其中插入新节点之后，当前节点默认就是红色，如果父节点也是红色，那么就需要进行修正，因为违反了性质4，
+     * 首先要找到当前节点的叔叔节点
+     * 第一步判断叔叔节点的颜色，如果叔叔节点是红色的，那么就将父节点和叔叔节点都染成黑色的，将爷爷节点染成红色的，然后指针移动到爷爷节点
+     * 第二部，如果叔叔节点是黑色的，那么判断当前节点的方向是否与叔叔节点方向一样，比如叔叔节点是爷爷节点的右孩子，当前节点也是父节点的右孩子，
+     * 那么就需要将指针移动到父节点，然后执行一个与当前节点方向相反方向的旋转，本例中为左旋
+     * 第三步，如果叔叔节点是黑色的，那么判断当前节点的方向是否与叔叔节点方向相反，例如叔叔节点是爷爷节点的右孩子，当前节点是父节点的左孩子，
+     * 那么需要将父节点染成黑色的，将爷爷节点染成红色的，然后将指针移动到爷爷节点，最后对爷爷节点执行一个与当前节点相反方向的旋转，本例中为右旋
+     * @param tree
+     * @param node
+     */
     public void insertFix(RbTree<T> tree , RbTreeNode<T> node){
         /**
          * 因为当前节点是红色的，并且如果父节点也是红色的，那么就需要进行处理
@@ -100,16 +113,52 @@ public class RbTree<T extends Comparable<T>> {
             if(node.getParent() == node.getParent().getParent().getLeft()){
                 RbTreeNode uncle = node.getParent().getParent().getRight();
                 //如果叔叔的节点也是红色的，那么就将父节点和叔叔节点染成黑色，将爷爷节点染成红色，然后将当前
-                //要处理的节点转译成爷爷节点，因为爷爷节点是红色的，可能会违反(2根节点是黑色，4或者一个节点的左右孩子节点都是黑色两条性质中的一条)，需要继续执行
+                //然后将指针移动到爷爷节点，因为爷爷节点是红色的，可能会违反
+                // (2根节点是黑色，4或者一个节点的左右孩子节点都是黑色两条性质中的一条)，需要继续执行
                 if(uncle.getColor() == 0){
                     node.getParent().setColor(1);
                     uncle.setColor(1);
                     node.getParent().getParent().setColor(0);
                     node = node.getParent().getParent();
                 }
-                else if(node)
+                //如果叔叔节点是黑色的，并且当前节点是父节点的右孩子，那么当前节点指针上移到父节点，然后父节点进行左旋转
+                else if(node == node.getParent().getRight()){
+                    node = node.getParent();
+                    leftRotation(tree,node);
+                    //如果叔叔节点是黑色的，并且当前节点是父节点的左孩子，
+                    //那么将父节点变成黑色的，将爷爷节点变成红色的，,然后将指针进行上移到爷爷节点，最后对爷爷节点进行右旋转
+                }else{
+                    node.getParent().setColor(1);
+                    node.getParent().getParent().setColor(0);
+                    node = node.getParent().getParent();
+                    rightRotaion(tree,node);
+                }
+                //如果当前节点的父节点是爷爷节点的右孩子
+            }else{
+                //当前爷爷节点的左孩子就是当前节点的叔叔节点
+                RbTreeNode uncle = node.getParent().getParent().getLeft();
+                //如果叔叔节点是红色的，那么将父节点和叔叔节点染黑，然后将爷爷节点染成红色,然后将指针指向爷爷节点
+                if(uncle.getColor() == 0){
+                    node.getParent().setColor(1);
+                    uncle.setColor(1);
+                    node.getParent().getParent().setColor(0);
+                    node = node.getParent().getParent();
+                    //如果叔叔节点是黑色的，并且当前节点是父节点的左孩子，那么将指针移到父节点，然后对父节点进行右旋
+                }else if(node == node.getParent().getLeft()){
+                    node = node.getParent();
+                    rightRotaion(tree,node);
+                    //如果叔叔节点是黑色的，并且当前节点是父节点的右孩子，那么将父节点设置为黑色的，将爷爷节点变成红色的，
+                    //最后对爷爷节点进行左旋
+                }else{
+                    node.getParent().setColor(1);
+                    node.getParent().getParent().setColor(0);
+                    node = node.getParent().getParent();
+                    leftRotation(tree,node);
+                }
             }
         }
+        //最后将根节点颜色设置成黑色的
+        tree.getRoot().setColor(1);
     }
 
     public RbTreeNode<T> getRoot() {
