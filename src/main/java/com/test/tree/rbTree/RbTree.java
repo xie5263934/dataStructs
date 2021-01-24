@@ -161,6 +161,58 @@ public class RbTree<T extends Comparable<T>> {
         tree.getRoot().setColor(1);
     }
 
+    /**
+     * 删除完成之后需要进行移植操作，主要就是处理孩子节点和父亲节点的关系，需要将孩子节点的父指针指向当前删除节点的父节点
+     * 需要将父节点的某个孩子节点指针指向当前删除节点的孩子节点
+     * @param tree
+     * @param parent
+     * @param child
+     */
+    private void transplant(RbTree<T> tree, RbTreeNode<T> parent, RbTreeNode<T> child){
+        /**
+         * 如果当前要删除节点的父节点是nil，那么表示当前要删除节点是根节点，那么删除之后，它的孩子节点变成新的根节点
+         */
+        if(parent.getParent() == tree.nil){
+            tree.setRoot(child);
+        }
+        /**
+         * 如果当前要删除节点是父节点的左孩子，那么父节点的左孩子指针指向当前删除节点的孩子节点，否则
+         * 父节点的右孩子指针指向当前删除节点的孩子节点
+         */
+        if(parent == parent.getParent().getLeft()){
+            parent.getParent().setLeft(child);
+        }else{
+            parent.getParent().setRight(child);
+        }
+        /**
+         * 最后当前要删除节点的孩子节点的指针指向了当前要删除节点的父节点
+         */
+        child.setParent(parent.getParent());
+    }
+
+    private void delete(RbTree<T> tree, RbTreeNode<T> node){
+        RbTreeNode<T> tmp = node;
+        int originColor = tmp.getColor();
+        RbTreeNode<T> child = null;
+        if(node.getLeft() == tree.nil){
+            child = node.getRight();
+            transplant(tree,node,child);
+        }else if(node.getRight() == tree.nil){
+            child = node.getLeft();
+            transplant(tree, node, child);
+        }else{
+            tmp =
+        }
+    }
+
+    private RbTreeNode<T> getMinimun(RbTree<T> tree, RbTreeNode<T> node){
+        RbTreeNode<T> mini = node;
+        while(node.getLeft() != tree.nil){
+            mini = mini.getLeft();
+        }
+        return mini;
+    }
+
     public RbTreeNode<T> getRoot() {
         return root;
     }
