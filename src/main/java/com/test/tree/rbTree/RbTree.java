@@ -201,8 +201,105 @@ public class RbTree<T extends Comparable<T>> {
             child = node.getLeft();
             transplant(tree, node, child);
         }else{
-            tmp =
+            tmp = getMinimun(tree,node.getRight());
+            originColor = tmp.getColor();
+            child = tmp.getRight();
+            if(tmp.getParent() == node){
+                child.setParent(tmp);
+            }else{
+                transplant(tree,tmp,child);
+                tmp.setRight(node.getRight());
+                tmp.getRight().setParent(tmp);
+            }
+            transplant(tree,node,tmp);
+            tmp.setLeft(node.getLeft());
+            tmp.getLeft().setParent(tmp);
+            tmp.setColor(node.getColor());
         }
+        if(originColor == 0){
+
+        }
+    }
+
+    private void deleteFix(RbTree<T> tree, RbTreeNode<T> node){
+        //当当前节点不是根节点，并且当前节点的颜色为黑色时继续执行调整
+        while(node != tree.nil && node.getColor() ==  0){
+            //如果当前节点是父节点的左孩子
+            if(node == node.getParent().getLeft()){
+                //那么获取到当前节点的兄弟节点，也就是当前节点父节点的有孩子
+                RbTreeNode<T> brother = node.getParent().getRight();
+                //如果右兄弟节点是红色的
+                if(brother.getColor() == 1){
+                    /**
+                     * 兄弟节点设置成黑色的
+                     * 父节点设置成红色的
+                     */
+                    brother.setColor(0);
+                    node.getParent().setColor(1);
+                    /**
+                     * 做与兄弟节点位置相反方向的选转，当前兄弟节点是右，那么就对父节点做左旋转，这样兄弟节点这个黑色节点就变成了当前子树的根节点
+                     */
+                    leftRotation(tree,node.getParent());
+                    //获取当前节点新的兄弟
+                    brother = node.getParent().getRight();
+                }
+                /**
+                 * 当兄弟节点的右孩子是黑色的，并且兄弟节点的左孩子也是黑色的时候，那么将兄弟节点染红，然后指针移动到父节点继续执行
+                 */
+                if(brother.getRight().getColor() == 0 && brother.getLeft().getColor() == 0){
+                    brother.setColor(1);
+                    node = node.getParent();
+                    /**
+                     * 如果兄弟节点是黑色的，并且兄弟节点的右孩子是黑色，但是左孩子是红色的时候，将左孩子染黑，兄弟节点设置成红色的，
+                     * 将兄弟节点按照染黑孩子的相反方向选转，最后获取节点新的兄弟节点
+                     */
+                }else if(brother.getRight().getColor() == 0 && brother.getLeft().getColor() == 1){
+                    brother.getLeft().setColor(0);
+                    brother.setColor(1);
+                    rightRotaion(tree,brother);
+                    brother = node.getParent().getRight();
+                }else{
+                    /**
+                     * 如果当前兄弟节点是黑色的，但是兄弟节点的右孩子是红色的，那么不管兄弟节点的左孩子是什么颜色
+                     * 将兄弟节点的颜色设置成父节点的颜色
+                     * 将父节点染黑
+                     * 将兄弟节点的右孩子染黑
+                     * 最后将父节点进行与兄弟节点相反方向的选转
+                     * 将当前指针指向树的根节点，退出循环
+                     */
+                    brother.setColor(node.getParent().getColor());
+                    node.getParent().setColor(0);
+                    brother.getRight().setColor(0);
+                    leftRotation(tree,node.getParent());
+                    node = tree.root;
+                }
+            }else{
+                RbTreeNode<T> brother = node.getParent().getLeft();
+                if(brother.getColor() == 1){
+                    brother.setColor(0);
+                    node.getParent().setColor(1);
+                    rightRotaion(tree,node.getParent());
+                    brother = node.getParent().getLeft();
+                }
+                if(brother.getLeft().getColor() == 0&& brother.getRight().getColor() == 0){
+                    brother.setColor(1);
+                    node = node.getParent();
+                }else if(brother.getLeft().getColor() == 0){
+                    brother.getRight().setColor(0);
+                    brother.setColor(1);
+                    leftRotation(tree, brother);
+                    brother = node.getParent().getLeft();
+                }else{
+                    brother.setColor(node.getParent().getColor());
+                    node.getParent().setColor(0);
+                    node.getLeft().setColor(0);
+                    rightRotaion(tree,node.getParent());
+                    node = tree.root;
+                }
+            }
+        }
+        //最后将根节点染黑
+        node.setColor(0);
     }
 
     private RbTreeNode<T> getMinimun(RbTree<T> tree, RbTreeNode<T> node){
