@@ -1,5 +1,6 @@
 package com.test.graph;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -63,9 +64,7 @@ public class Graph {
          * 在初始化的时候，将所有节点的上个节点初始化为一个不可能的节点，这样作为边际，方便后续的判断和处理
          */
         int[] pre = new int[this.v];
-        for (int i = 0; i < v; i++) {
-            pre[i] = -1;
-        }
+        Arrays.fill(pre, -1);
         /**
          * 判断队列中是否还有节点，如果有节点，那么就访问这些节点直接相连的下个层级的节点。
          */
@@ -99,7 +98,78 @@ public class Graph {
         System.out.println(t + "->");
     }
 
+    /**
+     * 深度遍历
+     * 全局变量found用来标识是否找到了目标顶点，用来控制所有的递归方法的返回
+     * visited用来标识当前图中的节点是否被访问过，如果当前节点已经被访问过了，就跳过当前节点，否则就将标识设置成true，然后对当前节顶点做处理
+     * pre用来存储顶点的前驱节点，也就是某个顶点是从哪个顶点访问过来的，用来存储它的访问路径上的前一个顶点，在初始化的时候需要设置成一个边界之外
+     * 的值，这样在后面才好用来做边界判断,
+     * 最后递归的调用查找方法，直到找到目标顶点或者是到达边界
+     *
+     * @param s
+     * @param t
+     */
     public void dfs(int s, int t) {
+        /**
+         * 如果目标顶点和起始顶点一样，直接返回
+         */
+        if (s == t) {
+            return;
+        }
+        /**
+         * 将全局的标识设置成false，开始查找操作
+         */
+        found = false;
+        /**
+         * visited数组用来存储当前顶点的访问标识，如果是true表示已经被访问过了，就不需要再访问了。
+         * 在初始化的时候，需要将起始顶点设置成true，标识起始顶点已经访问过了
+         */
+        boolean[] visited = new boolean[v];
+        visited[s] = true;
+        /**
+         * pre数组用来存储当前被访问的顶点的前驱顶点，用来记录当前顶点是从哪个顶点访问过来的。
+         * 在初始化的时候，将其所有值设置成边界值，这样在后续使用的时候方便做边界判断
+         */
+        int[] pre = new int[v];
+        Arrays.fill(pre, -1);
+        /**
+         * 从起始顶点到目标顶点的查找
+         */
+        recdfs(s, t, visited, pre);
+        print(pre, s, t);
+    }
 
+    private void recdfs(int s, int t, boolean[] visited, int[] pre) {
+        /**
+         * 如果全局的查找标识是true，表示已经找到了目标顶点，那么不用执行当前方法了，直接返回
+         */
+        if (found) {
+            return;
+        }
+        /**
+         * 如果当前顶点就是目标顶点，那么表示找到了目标顶点了，那么将全局查找标识设置成true，并且返回
+         */
+        if (s == t) {
+            found = true;
+            return;
+        }
+        /**
+         * 首先第一步将当前节点的访问标识设置成true，表示当前节点已经被访问过了
+         */
+        visited[s] = true;
+        /**
+         * 依次访问当前顶点直接连接的所有顶点，查找目标顶点
+         */
+        for (int i = 0; i < store[s].size(); i++) {
+            /**
+             * 依次取出当前顶点的直接连接的顶点，然后判断直接连接的那个顶点有没有被访问过，如果没有被访问过，那么设置直接连接顶点的前驱是当前顶点,
+             * 并且以直接连接的那个顶点作为起点继续递归往后往后查找目标顶点
+             */
+            int q = store[s].get(i);
+            if (!visited[q]) {
+                pre[q] = s;
+                recdfs(q, t, visited, pre);
+            }
+        }
     }
 }
