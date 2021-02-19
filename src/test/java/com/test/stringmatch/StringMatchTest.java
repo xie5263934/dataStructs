@@ -93,4 +93,22 @@ public class StringMatchTest {
         KMPMatch kmpMatch = new KMPMatch();
         System.out.println(kmpMatch.indexOf(main,pattern));
     }
+
+    @Test
+    public void testTrieTree(){
+        char [] hello = {'h','e','l','l','o'};
+        char [] hi = {'h','i'};
+        char [] her = {'h','e','r'};
+        char [] so = {'s','o'};
+        char [] see = {'s','e','e'};
+        TrieTree trieTree = new TrieTree();
+        trieTree.insert(hello);
+        trieTree.insert(hi);
+        trieTree.insert(her);
+        trieTree.insert(so);
+        trieTree.insert(see);
+        char [] he = {'h','e'};
+        System.out.println(trieTree.search(he));
+        System.out.println(trieTree.search(her));
+    }
 }
