@@ -111,4 +111,20 @@ public class StringMatchTest {
         System.out.println(trieTree.search(he));
         System.out.println(trieTree.search(her));
     }
+
+    @Test
+    public void ACMatch(){
+        char [] he = {'h','e'};
+        char [] she = {'s','h','e'};
+        char [] hers = {'h','e','r','s'};
+        char [] his = {'h','i','s'};
+        char [] ahishers = {'a','h','i','s','h','e','r','s'};
+        ACMatch acMatch = new ACMatch();
+        acMatch.insert(he);
+        acMatch.insert(she);
+        acMatch.insert(hers);
+        acMatch.insert(his);
+        acMatch.buildFail();
+        acMatch.query(ahishers);
+    }
 }
