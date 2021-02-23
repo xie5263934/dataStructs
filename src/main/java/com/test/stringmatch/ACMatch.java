@@ -25,35 +25,80 @@ public class ACMatch {
      * @param pattern
      */
     public void insert(char[] pattern) {
+        /**
+         * 以根节点为起点开始插入模式串
+         */
         ACNode p = root;
+        /**
+         * 这里i定义在外面，是因为遍历结束之后，i的大小就是当前插入模式串的大小，需要将这个大小保存在trie树中当前模式串之后一个字符的exist字符中，标识当前这个字符是一个字符串的结束字符，并且当前这个字符串的大小是多少。
+         */
         int i = 0;
         for (; i < pattern.length; i++) {
+            /**
+             * 通过当前这个字符计算，计算出这个字符的下标，然后去当前节点的孩子节点指针数组中查找是否有对应的孩子节点存在，如果不存在，就创建一个节点，然后将节点的指针存储在当前指针数组对应元素中
+             */
             int index = pattern[i] - 'a';
             if (p.children[index] == null) {
                 ACNode acNode = new ACNode(pattern[i]);
                 p.children[index] = acNode;
             }
+            /**
+             * 将操作指针移动到孩子节点继续下一个字符的插入操作
+             */
             p = p.children[index];
         }
+        /**
+         * 插入完成之后，当前p指向的就是当前插入模式串的最后一个字符的节点，那么将当前这个节点的exist第一个元素设置成模式串的大小，用来标识当前这个字符是一个模式串的结束字符，并且这个模式串的大小是多少。
+         */
         p.exist[0] = i;
     }
 
+    /**
+     * 构建失败指针,这里失败指针的作用，是当前主串匹配到这个字符的时候，主串的下一个字符，在当前这个节点的孩子节点中查找不到了，那么我们通过失败指针转移到另外一个模式串分支上继续进行匹配，并且这个新的分支已经匹配成功了部分前缀了，我们不需要从主串的第0个字符
+     * 开始匹配，直接从当前匹配失败这个字符开始匹配，如果还失败，那就继续查找当前这个失败指针指向的节点的失败指针指向的节点，重复同样的操作，直到访问到根节点的fail指针，如果还不能匹配，那么当前这个字符就真的不能完全匹配了，就需要从主串的下一个字符从trie树的root开始匹配了，因为
+     * 之前通过fail指针，已经将遍历的起始节点，移动到root了。
+     * 构建fail指针的过程，就是对trie树进行广度遍历的过程
+     */
     public void buildFail() {
+        /**
+         * 以root为起点开始广度遍历
+         */
         ACNode p = root;
+        /**
+         * 用来存储，当前已经遍历了，但是孩子节点还没有遍历的节点，用来实现广度遍历操作
+         */
         Queue<ACNode> queue = new LinkedList<>();
+        /**
+         * 首先将根节点加入到队列中，开始遍历操作
+         */
         queue.add(p);
         while (!queue.isEmpty()) {
+            /**
+             * 如果当前队列不空，那么就将队列的第一个元素拿出来，如果当前元素是根节点，那么就将fail指针特殊处理指向null
+             */
             p = queue.remove();
             if (p == root) {
                 p.fail = null;
             }
+            /**
+             * 然后对当前节点的孩子节点进行fail指针的处理
+             */
             for (ACNode pc : p.children) {
+                /**
+                 * 如果当前节点的父节点是根节点，那么当前节点不可能有后缀节点，所以直接将其fail指针指向根节点，这里我们对于除了根节点以外的所有节点，如果都不能找到一个最长的公共后缀，那么它的fail指针都指向root根节点
+                 */
                 if (pc != null) {
                     if (p == root) {
                         pc.fail = p;
                     } else {
+                        /**
+                         * 如果当前节点的父节点不是根节点，那么取出父节点的fail指针指向的节点
+                         */
                         ACNode q = p.fail;
                         while (q != null) {
+                            /**
+                             * 在fail指针指向的节点的孩子指针数组中查找是否有跟当前孩子节点字符一样的节点，如果有，那么将孩子节点的fail指针指向那个节点，并且将exist数组的第二个元素，设置成那个节点对应的模式串字符串的长读。退出当前循环，因为fail指针已经设置完成了
+                             */
                             int index = pc.data - 'a';
                             ACNode qc = q.children[index];
                             if (qc != null) {
@@ -61,7 +106,14 @@ public class ACMatch {
                                 pc.exist[1] = qc.exist[0];
                                 break;
                             }
+                            /**
+                             * 如果上面的匹配失败了，那么就将失败节点移动到失败指针指向的那个节点的失败指针的对应节点，其实说白了，就是当前节点在设置失败指针的时候，首先找父节点的失败指针指向的对象，然后在里面去匹配子节点，如果能匹配成功，就设置失败指针为那个节点，
+                             * 如果匹配不能成功，那么就要查找那个失败节点的失败指针对应的节点，重复同样的操作，直到失败指针指向的对象，最后移动到了root节点指向的那个对象，也就是null，说明当前模式串，没有匹配上任何的公共后缀，那么当前节点失败指针指向root
+                             */
                             q = q.fail;
+                        }
+                        if (q == null) {
+                            pc.fail = root;
                         }
                     }
                     queue.add(pc);
@@ -70,26 +122,58 @@ public class ACMatch {
         }
     }
 
+    /**
+     * 在主串中进行匹配操作
+     *
+     * @param main
+     */
     public void query(char[] main) {
+        /**
+         * 以根节点为起点进行操作
+         */
         ACNode p = root;
-        for (int i = 0; i < main.length; i++) {
+        /**
+         * i 对应主串的下标，用来表示当前匹配是主串的哪个字符
+         */
+        int i = 0;
+        while (i < main.length) {
+            /**
+             * 计算当前要匹配字符的下标，在对应节点的孩子指针数组中查找对应字符节点是否存在，如果存在了，那么就检查那个孩子节点的exist数组，如果某个元素的值大于0，那么就表示匹配成功了一个模式串，那么就将那个模式串的起始地址，和模式串的内容打印出来，起始地址就是当前匹配的
+             * 字符下标i-当前匹配上字节的exist数组的值再加上1，
+             */
             int index = main[i] - 'a';
             ACNode node = p.children[index];
+            /**
+             * 如果当前字符能够匹配到一个节点，那么就检查当前节点的exist数组，如果数组的值是大于0的，表示成功匹配了一个模式串
+             */
             if (node != null && node.data == main[i]) {
                 for (int s : node.exist) {
                     if (s != -1) {
+                        /**
+                         * i-s+1就是模式串的起始位置
+                         */
                         int start = i - s + 1;
                         StringBuilder builder = new StringBuilder();
                         while (start <= i) {
                             builder.append(main[start]);
                             start++;
                         }
-                        System.out.println("在主串的第" + start + "位置匹配到了一个模式串" + builder.toString());
+                        System.out.println("在主串的第" + (i - s + 1) + "位置匹配到了一个模式串" + builder.toString());
                     }
                 }
+                /**
+                 * 处理完成之后，那么将指针和主串的下标都移动一位，去匹配下一个字符
+                 */
                 p = node;
+                i++;
+                /**
+                 * 如果匹配失败了，就检查失败指针，如果失败指针是null，表示在root节点失败的，那么就停留在root节点上，将主串下标移动一位，去匹配主串的下一个字符
+                 * 如果失败指针不为null，表示当前不是在root失败的，那么就将ac自动机移动失败指针指向的另外一个模式串的对应节点上，继续匹配当前字符，重复当前的动作
+                 */
             } else if (p.fail != null) {
                 p = p.fail;
+            } else {
+                i++;
             }
         }
     }
