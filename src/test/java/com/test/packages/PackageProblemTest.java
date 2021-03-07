@@ -14,4 +14,16 @@ public class PackageProblemTest {
         packageProblem.f(0,0);
         System.out.println(packageProblem.getMaxW());
     }
+
+    @Test
+    public void testPackageProblem2(){
+        PackageProblem2 problem2 = new PackageProblem2();
+        problem2.handle();
+    }
+
+    @Test
+    public void testPackageProblem3(){
+        PackageProblem3 problem3 = new PackageProblem3();
+        problem3.handle();
+    }
 }
