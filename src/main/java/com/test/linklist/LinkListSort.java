@@ -51,13 +51,13 @@ public class LinkListSort {
          */
         ListNode slow = head;
         ListNode quick = head;
-        while (quick != tail) {
+        while (quick.next != tail) {
             slow = slow.next;
             quick = quick.next;
             /**
              * 这里是第二个关键点，需要判断快指针是否到达尾节点，如果没有，快指针就再走一部，这样快指针就一次走两步了。
              */
-            if (quick != tail) {
+            if (quick.next != tail) {
                 quick = quick.next;
             }
         }
