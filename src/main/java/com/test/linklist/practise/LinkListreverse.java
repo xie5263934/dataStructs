@@ -48,12 +48,12 @@ public class LinkListreverse {
             next = node.getNext();
             node.setNext(previous);
             if (previous == header) {
-                node.setNext(null);
+                previous.setNext(null);
             }
-            previous = node;
             if (next == null) {
                 header.setNext(node);
             }
+            previous = node;
             node = next;
         }
     }
