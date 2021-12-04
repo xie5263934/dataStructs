@@ -21,17 +21,20 @@ public class BinarySearchTreeTest {
         tree.add(node3);
         tree.add(node4);
         tree.add(node5);
-        tree.middle(tree.getTree());
+        //tree.middle(tree.getTree());
        /* int value  = 11;
         Node node6 = tree.search(value);
         print(node6,value);
         value=15;
         Node node7 = tree.search(value);
         print(node7,value);*/
-        int value = 16;
+       /* int value = 16;
         System.out.println("准备删除" + value);
         tree.delete(value);
-        tree.middle(tree.getTree());
+        tree.middle(tree.getTree());*/
+//        tree.preOrder();
+//        tree.midOrder();
+        tree.postOrder();
     }
 
     private void print(Node node, int value) {
